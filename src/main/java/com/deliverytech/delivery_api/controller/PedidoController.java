@@ -2,7 +2,7 @@ package com.deliverytech.delivery_api.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.deliverytech.delivery_api.dto.PedidoRequestDTO;
+import com.deliverytech.delivery_api.dto.request.PedidoRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

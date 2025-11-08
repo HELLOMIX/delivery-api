@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-import com.deliverytech.delivery_api.dto.RestauranteRequestDTO;
+import com.deliverytech.delivery_api.dto.request.RestauranteRequestDTO;
 import com.deliverytech.delivery_api.projection.RelatorioVendas;
 import com.deliverytech.delivery_api.repository.PedidoRepository;
 import com.deliverytech.delivery_api.repository.ProdutoRepository;
