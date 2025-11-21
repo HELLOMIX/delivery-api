@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResposeDTO {
+public class LoginResponseDTO {
     private String token;
     private String tipo;
     private Long expiracao;

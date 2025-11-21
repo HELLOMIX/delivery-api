@@ -2,9 +2,10 @@ package com.deliverytech.delivery_api.services.impl;
 
 import com.deliverytech.delivery_api.dto.request.LoginRequestDTO;
 import com.deliverytech.delivery_api.dto.request.UsuarioRequestDTO;
-import com.deliverytech.delivery_api.dto.response.LoginResposeDTO;
+import com.deliverytech.delivery_api.dto.response.LoginResponseDTO;
 import com.deliverytech.delivery_api.dto.response.UsuarioResponseDTO;
 import com.deliverytech.delivery_api.entity.Usuario;
+import com.deliverytech.delivery_api.enums.Role;
 import com.deliverytech.delivery_api.exception.BusinessException;
 import com.deliverytech.delivery_api.repository.UsuarioRepository;
 import com.deliverytech.delivery_api.security.JwtUtil;
@@ -13,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
@@ -42,12 +42,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         Usuario usuario = Usuario.builder()
                 .email(dto.getEmail())
-                .nome(dto.getNome())
                 .senha(passwordEncoder.encode(dto.getSenha()))
-                .role(dto.getRole())
-                .restauranteId(dto.getRestauranteId())
-                .ativo(true)
+                .nome(dto.getNome())
+                .role(dto.getRole() != null ? dto.getRole() : Role.CLIENTE)
                 .dataCriacao(LocalDateTime.now())
+                .ativo(true)
+                .restauranteId(dto.getRestauranteId())
                 .build();
         usuarioRepository.save(usuario);
 
@@ -56,12 +56,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public LoginResposeDTO login(LoginRequestDTO dto) {
+    public LoginResponseDTO login(LoginRequestDTO dto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha()));
         Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new BusinessException("Usuário inválido", String.valueOf(HttpStatus.UNAUTHORIZED)));
 
-        LoginResposeDTO responseDTO = new LoginResposeDTO();
+        LoginResponseDTO responseDTO = new LoginResponseDTO();
         responseDTO.setUsuario(modelMapper.map(usuario, UsuarioResponseDTO.class));
         responseDTO.setTipo("Bearer");
         responseDTO.setExpiracao(86400000L); // 1 dia em segundos
